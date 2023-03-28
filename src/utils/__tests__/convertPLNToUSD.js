@@ -9,7 +9,6 @@ describe("convertPLNToUSD", () => {
   it("should return NaN when passed value is text", () => {
     expect(convertPLNToUSD("6")).toBeNaN();
     expect(convertPLNToUSD("abc")).toBeNaN();
-    expect(convertPLNToUSD("a")).toBeNaN();
     expect(convertPLNToUSD("-123")).toBeNaN();
   });
   it("should return NaN when input is empty", () => {
@@ -20,5 +19,6 @@ describe("convertPLNToUSD", () => {
     expect(convertPLNToUSD([])).toBe("Error");
     expect(convertPLNToUSD(function () {})).toBe("Error");
     expect(convertPLNToUSD(null)).toBe("Error");
+    expect(convertPLNToUSD(true)).toBe("Error");
   });
 });
