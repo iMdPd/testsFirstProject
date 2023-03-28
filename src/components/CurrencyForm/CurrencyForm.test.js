@@ -11,12 +11,21 @@ describe("Component CurrencyForm", () => {
     render(<CurrencyForm action={action} />);
 
     const submitButton = screen.getByText("Convert");
+    const amountValueInput = screen.getByTestId("amountValue");
+    const convertFromCurrencySelect = screen.getByTestId("fromCurrency");
+    const convertToCurrencySelect = screen.getByTestId("toCurrency");
+
+    userEvent.type(amountValueInput, "100");
+    userEvent.selectOptions(convertFromCurrencySelect, "PLN");
+    userEvent.selectOptions(convertToCurrencySelect, "USD");
+
     userEvent.click(submitButton);
 
     expect(action).toHaveBeenCalledTimes(1);
-
-    const amountValueInput = screen.getByTestId("amountValue");
-    const convertFromCurrencySelect = screen.getByTestId("fromCrrency");
-    const convertToCurrencySelect = screen.getByTestId("toCrrency");
+    expect(action).toHaveBeenCalledWith({
+      amount: 100,
+      from: "PLN",
+      to: "USD",
+    });
   });
 });
