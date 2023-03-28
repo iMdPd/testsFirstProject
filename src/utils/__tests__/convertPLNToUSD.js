@@ -12,5 +12,4 @@ describe("convertPLNToUSD", () => {
     expect(convertPLNToUSD("a")).toBeNaN();
     expect(convertPLNToUSD("-123")).toBeNaN();
   });
-
 });
