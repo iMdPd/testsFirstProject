@@ -14,5 +14,9 @@ describe("Component CurrencyForm", () => {
     userEvent.click(submitButton);
 
     expect(action).toHaveBeenCalledTimes(1);
+
+    const amountValueInput = screen.getByTestId("amountValue");
+    const convertFromCurrencySelect = screen.getByTestId("fromCrrency");
+    const convertToCurrencySelect = screen.getByTestId("toCrrency");
   });
 });
