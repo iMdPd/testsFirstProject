@@ -77,29 +77,17 @@ describe("Component ResultBox", () => {
   });
   it("Should render text when Amount is less than zero", () => {
     const testParams = [
-      { testFrom: "USD", testTo: "USD", testAmount: 1 },
-      { testFrom: "USD", testTo: "USD", testAmount: 230 },
-      { testFrom: "PLN", testTo: "PLN", testAmount: 30 },
-      { testFrom: "PLN", testTo: "PLN", testAmount: 1 },
+      { testFrom: "USD", testTo: "PLN", testAmount: -1 },
+      { testFrom: "PLN", testTo: "USD", testAmount: -12 },
+      { testFrom: "PLN", testTo: "PLN", testAmount: -123 },
+      { testFrom: "USD", testTo: "USD", testAmount: -304 },
     ];
 
     for (let { testFrom, testTo, testAmount } of testParams) {
       render(<ResultBox from={testFrom} to={testTo} amount={testAmount} />);
 
-      const renderCurrencyForm = (currency) => {
-        if (currency === "USD") {
-          return "$";
-        } else {
-          return "PLN ";
-        }
-      };
-
       const output = screen.getByTestId("convertResult");
-      expect(output).toHaveTextContent(
-        `${renderCurrencyForm(testFrom)}${testAmount}.00 = ${renderCurrencyForm(
-          testTo
-        )}${testAmount}.00`
-      );
+      expect(output).toHaveTextContent("Wrong value...");
       cleanup();
     }
   });
