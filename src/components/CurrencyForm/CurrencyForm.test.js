@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CurrencyForm from "./CurrencyForm";
 
@@ -7,25 +7,35 @@ describe("Component CurrencyForm", () => {
     render(<CurrencyForm action={() => {}} />);
   });
   it("should run action callback with proper data on form submit", () => {
-    const action = jest.fn();
-    render(<CurrencyForm action={action} />);
+    const testCases = [
+      { testAmount: "100", testFrom: "PLN", testTo: "USD" },
+      { testAmount: "20", testFrom: "USD", testTo: "PLN" },
+      { testAmount: "200", testFrom: "PLN", testTo: "USD" },
+      { testAmount: "345", testFrom: "USD", testTo: "PLN" },
+    ];
 
-    const submitButton = screen.getByText("Convert");
-    const amountValueInput = screen.getByTestId("amountValue");
-    const convertFromCurrencySelect = screen.getByTestId("fromCurrency");
-    const convertToCurrencySelect = screen.getByTestId("toCurrency");
+    for (let { testAmount, testFrom, testTo } of testCases) {
+      const action = jest.fn();
+      render(<CurrencyForm action={action} />);
 
-    userEvent.type(amountValueInput, "100");
-    userEvent.selectOptions(convertFromCurrencySelect, "PLN");
-    userEvent.selectOptions(convertToCurrencySelect, "USD");
+      const submitButton = screen.getByText("Convert");
+      const amountValueInput = screen.getByTestId("amountValue");
+      const convertFromCurrencySelect = screen.getByTestId("fromCurrency");
+      const convertToCurrencySelect = screen.getByTestId("toCurrency");
 
-    userEvent.click(submitButton);
+      userEvent.type(amountValueInput, testAmount);
+      userEvent.selectOptions(convertFromCurrencySelect, testFrom);
+      userEvent.selectOptions(convertToCurrencySelect, testTo);
 
-    expect(action).toHaveBeenCalledTimes(1);
-    expect(action).toHaveBeenCalledWith({
-      amount: 100,
-      from: "PLN",
-      to: "USD",
-    });
+      userEvent.click(submitButton);
+
+      expect(action).toHaveBeenCalledTimes(1);
+      expect(action).toHaveBeenCalledWith({
+        amount: +testAmount,
+        from: testFrom,
+        to: testTo,
+      });
+      cleanup();
+    }
   });
 });
